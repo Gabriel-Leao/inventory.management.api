@@ -1,0 +1,108 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Product {
+  id            String     @id @default(uuid())
+  name          String
+  price         Float
+  rating        Float?
+  stockQuantity Int        @map("stock_quantity")
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+  sales         Sale[]
+  purchases     Purchase[]
+
+  @@map("products")
+}
+
+model Sale {
+  id          String   @id @default(uuid())
+  timestamp   DateTime
+  quantity    Int
+  unitPrice   Float    @map("unit_price")
+  totalAmount Float    @map("total_amount")
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @map("product_id")
+
+  @@map("sales")
+}
+
+model Purchase {
+  id        String   @id @default(uuid())
+  timestamp DateTime
+  quantity  Int
+  unitCost  Float    @map("unit_cost")
+  totalCost Float    @map("total_cost")
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @map("product_id")
+
+  @@map("purchases")
+}
+
+model Expense {
+  id        String   @id @default(uuid())
+  category  String
+  amount    Float
+  timestamp DateTime
+
+  @@map("expenses")
+}
+
+model SaleSummary {
+  id               String   @id @default(uuid())
+  totalValue       Float    @map("total_value")
+  changePercentage Float?   @map("change_percentage")
+  date             DateTime
+
+  @@map("sales_summary")
+}
+
+model PurchaseSummary {
+  id               String   @id @default(uuid())
+  totalPurchased   Float    @map("total_purchased")
+  changePercentage Float?   @map("change_percentage")
+  date             DateTime
+
+  @@map("purchase_summary")
+}
+
+model ExpenseSummary {
+  id            String   @id @default(uuid())
+  totalExpenses Float    @map("total_expenses")
+  date          DateTime
+
+  expenseByCategory ExpenseByCategory[]
+
+  @@map("expense_summary")
+}
+
+model ExpenseByCategory {
+  id       String   @id @default(uuid())
+  category String
+  amount   BigInt
+  date     DateTime
+
+  expenseSummary   ExpenseSummary? @relation(fields: [expenseSummaryId], references: [id])
+  expenseSummaryId String?         @map("expense_summary_id")
+
+  @@map("expense_by_category")
+}
