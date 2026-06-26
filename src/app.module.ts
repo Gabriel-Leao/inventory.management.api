@@ -5,6 +5,7 @@ import { PrismaModule } from '@common/prisma/prisma.module';
 import { LoggerModule } from 'nestjs-pino';
 import { Request, Response } from 'express';
 import { ProductModule } from './modules/product/product.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { ProductModule } from './modules/product/product.module';
     PrismaModule,
     DashboardModule,
     ProductModule,
+    UserModule,
   ],
 })
 export class AppModule {}
