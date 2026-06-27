@@ -6,6 +6,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { Request, Response } from 'express';
 import { ProductModule } from './modules/product/product.module';
 import { UserModule } from './modules/user/user.module';
+import { ExpenseModule } from './modules/expense/expense.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { UserModule } from './modules/user/user.module';
     DashboardModule,
     ProductModule,
     UserModule,
+    ExpenseModule,
   ],
 })
 export class AppModule {}

@@ -8,7 +8,6 @@ export class DashboardController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async getMetrics() {
-    const metrics = await this.dashboardService.getDashboarcMetrics();
-    return metrics;
+    return await this.dashboardService.getDashboarcMetrics();
   }
 }

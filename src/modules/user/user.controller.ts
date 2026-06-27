@@ -8,8 +8,6 @@ export class UserController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async getAllUsers() {
-    const users = await this.userService.getUsers();
-
-    return users;
+    return await this.userService.getUsers();
   }
 }
