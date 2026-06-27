@@ -1,7 +1,7 @@
 {
   "name": "inventory.management.api",
   "version": "0.0.1",
-  "description": "",
+  "description": "REST API for inventory management built with NestJS, Prisma and PostgreSQL",
   "author": "Gabriel_Leão",
   "private": true,
   "license": "MIT",
