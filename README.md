@@ -1,98 +1,174 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Inventory Management — Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API REST para gerenciamento de estoque, produtos, despesas e usuários. Construída com NestJS, Prisma e PostgreSQL.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+> Este repositório contém apenas o **backend** da aplicação. O frontend está disponível em [inventory.management.ui](https://github.com/Gabriel-Leao/inventory.management.ui).
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tecnologias
 
-## Project setup
+- **NestJS 11**
+- **TypeScript**
+- **Prisma 7** com adapter PostgreSQL (`@prisma/adapter-pg`)
+- **PostgreSQL**
+- **nestjs-pino** para logging estruturado
+- **class-validator** + **class-transformer** para validação de DTOs
+- **Helmet** para headers de segurança
+- **Prettier** + **ESLint** para padronização de código
 
-```bash
-$ npm install
-```
+---
 
-## Compile and run the project
+## Pré-requisitos
+
+- Node.js 18+
+- npm ou equivalente
+- PostgreSQL em execução
+
+---
+
+## Instalação
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone https://github.com/Gabriel-Leao/inventory.management.api
+cd inventory.management.api
+npm install
 ```
 
-## Run tests
+O `postinstall` roda `prisma generate` automaticamente após a instalação.
+
+---
+
+## Variáveis de ambiente
+
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/inventory_management?schema=public"
+```
+
+---
+
+## Banco de dados
+
+Rode as migrations para criar as tabelas:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npx prisma migrate deploy
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Para popular o banco com dados de seed:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run "db seed"
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+O seed carrega dados dos arquivos JSON em `prisma/seedData/` na seguinte ordem: produtos → resumo de despesas → vendas → resumo de vendas → compras → resumo de compras → usuários → despesas → despesas por categoria.
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## Scripts
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+| Comando | Descrição |
+|---|---|
+| `npm run dev` | Inicia o servidor em modo watch |
+| `npm run build` | Gera o build de produção |
+| `npm run prod` | Inicia o servidor de produção a partir do build |
+| `npm run debug` | Inicia em modo debug com watch |
+| `npm test` | Executa os testes unitários |
+| `npm run test:watch` | Executa os testes em modo watch |
+| `npm run test:cov` | Executa os testes e gera relatório de cobertura |
+| `npm run lint` | Executa o ESLint com auto-fix |
+| `npm run format` | Formata o código com Prettier |
 
-## Support
+O servidor sobe na porta `3333` por padrão (configurável via variável de ambiente `PORT`).
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+## Estrutura do projeto
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```
+src/
+├── main.ts                     # Bootstrap da aplicação (CORS, Helmet, pipes globais)
+├── app.module.ts               # Módulo raiz
+│
+├── common/
+│   └── prisma/
+│       ├── prisma.module.ts    # Módulo global do Prisma
+│       └── prisma.service.ts   # Serviço de conexão com o banco
+│
+└── modules/
+    ├── dashboard/              # Métricas consolidadas do dashboard
+    ├── product/                # CRUD de produtos
+    │   └── dto/                # DTOs com validação via class-validator
+    ├── expense/                # Despesas por categoria
+    └── user/                   # Listagem de usuários
 
-## License
+prisma/
+├── schema.prisma               # Modelos e datasource
+├── prisma.config.ts            # Configuração de migrations e seed
+├── seed.ts                     # Script de seed
+└── seedData/                   # Dados iniciais em JSON por entidade
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+
+## Endpoints
+
+### Dashboard
+
+| Método | Rota | Descrição |
+|---|---|---|
+| `GET` | `/dashboard` | Retorna métricas consolidadas: produtos, resumo de vendas, compras, despesas e despesas por categoria |
+
+### Produtos
+
+| Método | Rota | Descrição |
+|---|---|---|
+| `GET` | `/products` | Lista todos os produtos. Aceita `?name=` para filtro por nome exato |
+| `POST` | `/products` | Cria um novo produto |
+
+**Body — POST `/products`:**
+
+```json
+{
+  "name": "string (3–120 caracteres)",
+  "price": "number (≥ 0, até 2 casas decimais)",
+  "rating": "number (1–5, até 2 casas decimais, opcional)",
+  "stockQuantity": "integer (≥ 0)"
+}
+```
+
+### Despesas
+
+| Método | Rota | Descrição |
+|---|---|---|
+| `GET` | `/expenses` | Lista despesas agrupadas por categoria, ordenadas por data decrescente |
+
+### Usuários
+
+| Método | Rota | Descrição |
+|---|---|---|
+| `GET` | `/users` | Lista todos os usuários |
+
+---
+
+## Schema do banco
+
+| Tabela | Descrição |
+|---|---|
+| `users` | Usuários da aplicação |
+| `products` | Produtos do estoque |
+| `sales` | Registros individuais de vendas |
+| `purchases` | Registros individuais de compras |
+| `expenses` | Despesas individuais |
+| `sales_summary` | Resumo agregado de vendas por período |
+| `purchase_summary` | Resumo agregado de compras por período |
+| `expense_summary` | Resumo agregado de despesas por período |
+| `expense_by_category` | Despesas agrupadas por categoria |
+
+---
+
+## Arquitetura
+
+A aplicação segue a arquitetura modular do NestJS. Cada domínio (dashboard, product, expense, user) é isolado em seu próprio módulo com controller, service e, quando aplicável, DTOs. O `PrismaModule` é global e injetado em todos os serviços. O logging é feito via `nestjs-pino` com formatação colorida em desenvolvimento.
