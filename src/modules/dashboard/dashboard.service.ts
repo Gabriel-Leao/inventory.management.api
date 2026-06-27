@@ -47,6 +47,8 @@ export class DashboardService {
         expenseByCategorySummary,
       };
     } catch (error) {
+      if (error instanceof HttpException) throw error;
+
       if (error instanceof Error) {
         this.logger.error(
           `Failed to retrieve dashboard metrics: ${error.message}`,

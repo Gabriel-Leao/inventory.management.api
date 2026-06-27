@@ -22,6 +22,8 @@ export class ExpenseService {
 
       return expensesBycategorySummary;
     } catch (error) {
+      if (error instanceof HttpException) throw error;
+
       if (error instanceof Error) {
         this.logger.error(
           `Failed to retrieve expenses: ${error.message}`,

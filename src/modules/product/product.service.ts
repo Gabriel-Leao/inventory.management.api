@@ -13,7 +13,7 @@ export class ProductService {
 
   async getProducts(productName?: string) {
     try {
-      if (productName && !productName.trim()) {
+      if (productName !== undefined && !productName.trim()) {
         throw new HttpException('Invalid product name', HttpStatus.BAD_REQUEST);
       }
 
@@ -32,6 +32,8 @@ export class ProductService {
 
       return products;
     } catch (error) {
+      if (error instanceof HttpException) throw error;
+
       if (error instanceof Error) {
         this.logger.error(
           `Failed to retrieve products: ${error.message}`,

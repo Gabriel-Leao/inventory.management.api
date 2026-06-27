@@ -14,6 +14,8 @@ export class UserService {
     try {
       return await this.prisma.user.findMany();
     } catch (error) {
+      if (error instanceof HttpException) throw error;
+
       if (error instanceof Error) {
         this.logger.error(
           `Failed to retrieve users: ${error.message}`,
