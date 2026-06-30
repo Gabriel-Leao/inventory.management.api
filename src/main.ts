@@ -8,7 +8,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   app.useLogger(app.get(Logger));
   app.use(helmet({ crossOriginResourcePolicy: true }));
-  app.enableCors();
+  app.enableCors({
+    origin: process.env.ALLOWED_ORIGIN ?? '*',
+  });
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(process.env.PORT ?? 3333);
 }
